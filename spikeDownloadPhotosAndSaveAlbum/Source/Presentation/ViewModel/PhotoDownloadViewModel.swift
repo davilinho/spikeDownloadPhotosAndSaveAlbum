@@ -14,18 +14,17 @@ import PhotosUI
     var isDownloading: Bool = false
     var progress: Double = 0.0
     var showError: Bool = false
-    
-    private let imageService: ImageServiceProtocol
-    private let photoLibraryService: PhotoLibraryServiceProtocol
-    
-    let imageURLs = [
-        "https://images.pexels.com/photos/674010/pexels-photo-674010.jpeg",
-        "https://images.pexels.com/photos/3852204/pexels-photo-3852204.jpeg",
-        "https://images.pexels.com/photos/3979134/pexels-photo-3979134.jpeg",
-        "https://images.pexels.com/photos/3973089/pexels-photo-3973089.jpeg"
-    ]
-    
-    init(imageService: ImageServiceProtocol, photoLibraryService: PhotoLibraryServiceProtocol) {
+    var imageCount: Int = 0
+    var maxImagesCount: String = ""
+
+    private var useCase: ListUsersUseCase
+    private let imageService: ImageService
+    private let photoLibraryService: PhotoLibraryService
+
+    init(useCase: ListUsersUseCase = DefaultUsersUseCase(),
+         imageService: ImageService = DefaultImageService(),
+         photoLibraryService: PhotoLibraryService = DefaultPhotoLibraryService()) {
+        self.useCase = useCase
         self.imageService = imageService
         self.photoLibraryService = photoLibraryService
     }
@@ -49,22 +48,34 @@ import PhotosUI
     
     private func downloadImages() async {
         await withTaskGroup(of: Void.self) { group in
-            self.imageURLs.forEach { urlString in
-                group.addTask {
-                    if let image = await self.imageService.downloadImage(from: urlString) {
-                        do {
-                            try await self.photoLibraryService.saveImage(image, to: self.albumName)
-                            await MainActor.run {
-                                self.progress += 1.0
+            do {
+                guard let resultsByPage = Int(self.maxImagesCount) else { return }
+                
+                let response = try await self.useCase.fetchUsers(resultsByPage: resultsByPage)
+                self.imageCount = response.entities.count
+                
+                guard let album = try self.photoLibraryService.fetchOrCreateAlbum(named: self.albumName) else { return }
+
+                response.entities.forEach { entity in
+                    group.addTask {
+                        if let imageURL = entity.picture?.medium,
+                           let image = await self.imageService.downloadImage(from: imageURL) {
+                            do {
+                                try await self.photoLibraryService.saveImage(image, to: album)
+                                await MainActor.run {
+                                    self.progress += 1.0
+                                }
+                            } catch {
+                                self.showError = true
                             }
-                        } catch {
-                            self.showError = true
                         }
                     }
                 }
+            } catch {
+                self.showError = true
             }
         }
-
+        
         await MainActor.run {
             self.isDownloading = false
             self.progress = 0.0

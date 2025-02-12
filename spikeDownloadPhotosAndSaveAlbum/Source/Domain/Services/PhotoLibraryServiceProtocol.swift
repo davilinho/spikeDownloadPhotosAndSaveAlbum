@@ -1,5 +1,5 @@
 //
-//  PhotoLibraryServiceProtocol.swift
+//  PhotoLibraryService.swift
 //  spikeDownloadPhotosAndSaveAlbum
 //
 //  Created by David Martin Nevado on 12/2/25.
@@ -9,12 +9,13 @@ import SwiftUI
 import Photos
 import PhotosUI
 
-protocol PhotoLibraryServiceProtocol {
+protocol PhotoLibraryService {
     func requestPermission() async -> Bool
-    func saveImage(_ image: UIImage, to albumName: String) async throws
+    func fetchOrCreateAlbum(named name: String) throws -> PHAssetCollection?
+    func saveImage(_ image: UIImage, to album: PHAssetCollection) async throws
 }
 
-class PhotoLibraryService: PhotoLibraryServiceProtocol {
+class DefaultPhotoLibraryService: PhotoLibraryService {
     func requestPermission() async -> Bool {
         let status = PHPhotoLibrary.authorizationStatus()
         switch status {
@@ -27,19 +28,8 @@ class PhotoLibraryService: PhotoLibraryServiceProtocol {
             return false
         }
     }
-    
-    func saveImage(_ image: UIImage, to albumName: String) async throws {
-        guard let album = try self.fetchOrCreateAlbum(named: albumName) else { return }
 
-        try await PHPhotoLibrary.shared().performChanges {
-            let request = PHAssetChangeRequest.creationRequestForAsset(from: image)
-            let albumChangeRequest = PHAssetCollectionChangeRequest(for: album)
-            let assetPlaceholder = request.placeholderForCreatedAsset
-            albumChangeRequest?.addAssets([assetPlaceholder as Any] as NSArray)
-        }
-    }
-    
-    private func fetchOrCreateAlbum(named name: String) throws -> PHAssetCollection? {
+    func fetchOrCreateAlbum(named name: String) throws -> PHAssetCollection? {
         let fetchOptions = PHFetchOptions()
         fetchOptions.predicate = NSPredicate(format: "localizedTitle = %@", name)
 
@@ -58,5 +48,14 @@ class PhotoLibraryService: PhotoLibraryServiceProtocol {
         }
 
         return nil
+    }
+
+    func saveImage(_ image: UIImage, to album: PHAssetCollection) async throws {
+        try await PHPhotoLibrary.shared().performChanges {
+            let request = PHAssetChangeRequest.creationRequestForAsset(from: image)
+            let albumChangeRequest = PHAssetCollectionChangeRequest(for: album)
+            let assetPlaceholder = request.placeholderForCreatedAsset
+            albumChangeRequest?.addAssets([assetPlaceholder as Any] as NSArray)
+        }
     }
 }
