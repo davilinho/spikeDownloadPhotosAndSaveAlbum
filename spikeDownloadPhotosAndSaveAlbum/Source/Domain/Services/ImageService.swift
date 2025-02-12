@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-protocol ImageService {
+protocol ImageService: Sendable {
     func downloadImage(from urlString: String) async -> UIImage?
 }
 

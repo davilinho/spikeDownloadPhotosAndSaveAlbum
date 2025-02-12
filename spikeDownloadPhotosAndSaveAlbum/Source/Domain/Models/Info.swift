@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Info: Codable {
+struct Info: Codable, Sendable {
     let seed: String?
     let results: Int
     let page: Int

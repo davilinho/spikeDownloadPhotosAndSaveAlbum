@@ -5,7 +5,7 @@
 //  Created by David Martin Nevado on 12/2/25.
 //
 
-class UserEntityResponse: @unchecked Sendable {
+struct UserEntityResponse: Sendable {
     var entities: [User] = []
     var info: Info?
 

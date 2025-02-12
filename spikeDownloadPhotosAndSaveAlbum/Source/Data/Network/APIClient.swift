@@ -7,11 +7,11 @@
 
 import Foundation
 
-protocol APIClient {
+protocol APIClient: Sendable {
     func request<T>(_ resource: Resource<T>) async throws -> T where T : Decodable & Sendable
 }
 
-protocol URLSessionProtocol {
+protocol URLSessionProtocol: Sendable {
     func data(for request: URLRequest) async throws -> (Data, URLResponse)
 }
 
@@ -19,7 +19,7 @@ extension URLSession: URLSessionProtocol {}
 
 let validStatus = 200...299
 
-final class DefaultAPIClient: APIClient, @unchecked Sendable {
+actor DefaultAPIClient: APIClient {
     private let session: URLSessionProtocol
 
     init(session: URLSessionProtocol = URLSession.shared) {
