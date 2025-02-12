@@ -9,7 +9,7 @@ protocol ListUsersUseCase: Sendable {
     func fetchUsers(resultsByPage: Int) async throws -> UserEntityResponse
 }
 
-class DefaultUsersUseCase: ListUsersUseCase, @unchecked Sendable {
+actor DefaultUsersUseCase: ListUsersUseCase {
     private let repository: UserRepository
 
     init(repository: UserRepository = DefaultUserRepository()) {
