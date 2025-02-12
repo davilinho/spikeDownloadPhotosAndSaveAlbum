@@ -8,41 +8,54 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var viewModel: PhotoDownloadViewModel
-
-    init() {
-        self.viewModel = PhotoDownloadViewModel(imageService: ImageService(), photoLibraryService: PhotoLibraryService())
-    }
+    @State private var viewModel = PhotoDownloadViewModel()
 
     var body: some View {
-        VStack {
-            Text("Download photos and save to Album Spike")
-                .font(.title)
+        @Bindable var viewModel = self.viewModel
 
-            HStack {
-                TextField("Put the album name here", text: self.$viewModel.albumName)
+        VStack {
+            Text("Download photos and create album")
+                .font(.title)
+                .multilineTextAlignment(.leading)
+            
+            Divider()
+
+            VStack(alignment: .leading) {
+                Text("Fill the album name")
+
+                TextField("Ex. My Photos", text: $viewModel.albumName)
                     .padding()
                     .border(.gray)
+            }
+
+            HStack(alignment: .bottom) {
+                VStack(alignment: .leading) {
+                    Text("Fill the max images count")
+
+                    TextField("Ex. 1000", text: $viewModel.maxImagesCount, prompt: Text("1000"))
+                        .padding()
+                        .border(.gray)
+                }
                 
                 Button {
-                    self.viewModel.downloadAndSaveImages()
+                    viewModel.downloadAndSaveImages()
                 } label: {
-                    Text(self.viewModel.isDownloading ? "Downloading..." : "Download")
+                    Text(viewModel.isDownloading ? "Downloading..." : "Download")
                         .padding()
                         .background(.blue)
                         .foregroundColor(.white)
                         .cornerRadius(8)
                 }
-                .disabled(self.viewModel.isDownloading)
+                .disabled(viewModel.isDownloading)
             }
 
-            ProgressView(value: self.viewModel.progress,
-                         total: Double(self.viewModel.imageURLs.count)) {
-                if self.viewModel.progress > 0, self.viewModel.progress < 4 {
+            ProgressView(value: viewModel.progress,
+                         total: Double(viewModel.maxImagesCount) ?? 1000) {
+                if viewModel.progress > 0, viewModel.progress < 4 {
                     Text("Downloading...")
                 }
             } currentValueLabel: {
-                Text("Downloaded \(Int(self.viewModel.progress).description) of \(self.viewModel.imageURLs.count) images")
+                Text("Downloaded \(Int(viewModel.progress).description) of \(viewModel.imageCount) images")
             }
             .padding(.top, 32)
             
