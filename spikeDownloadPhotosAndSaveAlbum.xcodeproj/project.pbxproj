@@ -29,9 +29,22 @@
 		8B2B3A6D2D5C987F009F1B70 /* spikeDownloadPhotosAndSaveAlbumUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = spikeDownloadPhotosAndSaveAlbumUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		8BBFAD6C2D5CB612008EEDB7 /* Exceptions for "spikeDownloadPhotosAndSaveAlbum" folder in "spikeDownloadPhotosAndSaveAlbum" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 8B2B3A512D5C987D009F1B70 /* spikeDownloadPhotosAndSaveAlbum */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		8B2B3A542D5C987D009F1B70 /* spikeDownloadPhotosAndSaveAlbum */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				8BBFAD6C2D5CB612008EEDB7 /* Exceptions for "spikeDownloadPhotosAndSaveAlbum" folder in "spikeDownloadPhotosAndSaveAlbum" target */,
+			);
 			path = spikeDownloadPhotosAndSaveAlbum;
 			sourceTree = "<group>";
 		};
@@ -321,6 +334,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "";
 				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
@@ -389,9 +403,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = spikeDownloadPhotosAndSaveAlbum/spikeDownloadPhotosAndSaveAlbum.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"spikeDownloadPhotosAndSaveAlbum/Preview Content\"";
+				DEVELOPMENT_TEAM = NFB35DJG93;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -411,6 +427,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.plexus.spikeDownloadPhotosAndSaveAlbum;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -426,9 +443,11 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = spikeDownloadPhotosAndSaveAlbum/spikeDownloadPhotosAndSaveAlbum.entitlements;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"spikeDownloadPhotosAndSaveAlbum/Preview Content\"";
+				DEVELOPMENT_TEAM = NFB35DJG93;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -448,6 +467,7 @@
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.plexus.spikeDownloadPhotosAndSaveAlbum;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
 				SWIFT_EMIT_LOC_STRINGS = YES;
