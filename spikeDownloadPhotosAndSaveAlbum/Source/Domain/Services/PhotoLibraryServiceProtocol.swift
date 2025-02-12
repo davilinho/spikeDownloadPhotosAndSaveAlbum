@@ -9,13 +9,13 @@ import SwiftUI
 import Photos
 import PhotosUI
 
-protocol PhotoLibraryService {
+protocol PhotoLibraryService: Sendable {
     func requestPermission() async -> Bool
-    func fetchOrCreateAlbum(named name: String) throws -> PHAssetCollection?
+    func fetchOrCreateAlbum(named name: String) async throws -> PHAssetCollection?
     func saveImage(_ image: UIImage, to album: PHAssetCollection) async throws
 }
 
-class DefaultPhotoLibraryService: PhotoLibraryService {
+actor DefaultPhotoLibraryService: PhotoLibraryService {
     func requestPermission() async -> Bool {
         let status = PHPhotoLibrary.authorizationStatus()
         switch status {
@@ -29,7 +29,7 @@ class DefaultPhotoLibraryService: PhotoLibraryService {
         }
     }
 
-    func fetchOrCreateAlbum(named name: String) throws -> PHAssetCollection? {
+    func fetchOrCreateAlbum(named name: String) async throws -> PHAssetCollection? {
         let fetchOptions = PHFetchOptions()
         fetchOptions.predicate = NSPredicate(format: "localizedTitle = %@", name)
 

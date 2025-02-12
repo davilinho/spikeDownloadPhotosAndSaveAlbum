@@ -54,7 +54,7 @@ import PhotosUI
                 let response = try await self.useCase.fetchUsers(resultsByPage: resultsByPage)
                 self.imageCount = response.entities.count
                 
-                guard let album = try self.photoLibraryService.fetchOrCreateAlbum(named: self.albumName) else { return }
+                guard let album = try await self.photoLibraryService.fetchOrCreateAlbum(named: self.albumName) else { return }
 
                 response.entities.forEach { entity in
                     group.addTask {

@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct User: Codable {
+struct User: Codable, Sendable {
     let picture: Picture?
 
     struct Picture: Codable {
