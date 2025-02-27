@@ -9,13 +9,13 @@ import SwiftUI
 import Photos
 import PhotosUI
 
-@Observable class PhotoDownloadViewModel {
-    var albumName: String = ""
-    var isDownloading: Bool = false
-    var progress: Double = 0.0
-    var showError: Bool = false
-    var imageCount: Int = 0
-    var maxImagesCount: String = ""
+class PhotoDownloadViewModel: ObservableObject {
+    @Published var albumName: String = ""
+    @Published var isDownloading: Bool = false
+    @Published var progress: Double = 0.0
+    @Published var showError: Bool = false
+    @Published var imageCount: Int = 0
+    @Published var maxImagesCount: String = ""
 
     private var useCase: ListUsersUseCase
     private let imageService: ImageService
@@ -52,7 +52,11 @@ import PhotosUI
                 guard let resultsByPage = Int(self.maxImagesCount) else { return }
                 
                 let response = try await self.useCase.fetchUsers(resultsByPage: resultsByPage)
-                self.imageCount = response.entities.count
+                
+                await MainActor.run { [weak self] in
+                    guard let self else { return }
+                    self.imageCount = response.entities.count
+                }
                 
                 guard let album = try await self.photoLibraryService.fetchOrCreateAlbum(named: self.albumName) else { return }
 
@@ -62,7 +66,8 @@ import PhotosUI
                            let image = await self.imageService.downloadImage(from: imageURL) {
                             do {
                                 try await self.photoLibraryService.saveImage(image, to: album)
-                                await MainActor.run {
+                                await MainActor.run { [weak self] in
+                                    guard let self else { return }
                                     self.progress += 1.0
                                 }
                             } catch {
