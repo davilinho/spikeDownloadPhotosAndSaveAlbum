@@ -8,11 +8,9 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var viewModel = PhotoDownloadViewModel()
+    @StateObject private var viewModel = PhotoDownloadViewModel()
 
     var body: some View {
-        @Bindable var viewModel = self.viewModel
-
         VStack {
             Text("Download photos and create album")
                 .font(.title)
